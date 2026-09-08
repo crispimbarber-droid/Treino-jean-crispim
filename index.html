@@ -85,14 +85,10 @@ historicoBtn.addEventListener('click',()=>{
     app.innerHTML='<section class="card"><h2>📊 Histórico de Treinos</h2><p>Nenhum treino concluído ainda.</p></section>';
     return;
   }
-const idx=T.findIndex(t=>t[0]===h.treino);
-const exercicios=T[idx]?.[2]||[];
-
 app.innerHTML='<section class="card"><h2>📊 Histórico de Treinos</h2>'+
   historico.slice().reverse().map(h=>{
     const i=T.findIndex(t=>t[0]===h.treino);
-    const ex=T[i]?.[2]||[];
-
+const ex=T[i]?.[2]||[];
     return '<div class="note"><b>'+h.data+'</b><br><b>'+h.treino+'</b><br><br>'+
       h.cargas.map((c,j)=>
         '🏋️ '+(ex[j]?.[0]||'Exercício')+' — <b>'+(c||'—')+(c?' kg':'')+'</b>'
