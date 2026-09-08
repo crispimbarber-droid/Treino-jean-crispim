@@ -37,5 +37,21 @@ app.innerHTML=`<section class="card"><h2>${t[0]}</h2><p>${t[1]}</p><table><tr><t
 <div class="note"><b>Cardio:</b> 30 minutos todos os dias, inclusive nos dias de folga.</div>
 <div class="note"><b>Execução:</b> aquecimento progressivo antes do primeiro exercício multiarticular; amplitude adequada, execução controlada e técnica estável. Aumente a carga quando completar o limite superior da faixa com boa execução.</div></section>`;
 }
-show(0);
+show(0);function saveLoads(){
+  const active=[...nav.children].findIndex(b=>b.classList.contains('active'));
+  document.querySelectorAll('input').forEach((input,j)=>{
+    localStorage.setItem('carga_'+active+'_'+j,input.value);
+  });
+}
+
+function restoreLoads(){
+  const active=[...nav.children].findIndex(b=>b.classList.contains('active'));
+  document.querySelectorAll('input').forEach((input,j)=>{
+    input.value=localStorage.getItem('carga_'+active+'_'+j)||'';
+  });
+}
+
+app.addEventListener('input',saveLoads);
+nav.addEventListener('click',()=>setTimeout(restoreLoads,50));
+restoreLoads();
 </script><script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(()=>{});}</script></body></html>
