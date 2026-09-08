@@ -1,0 +1,41 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-48.png">
+<meta name="theme-color" content="#1d3d5b">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Treino Jean">
+<title>Treino Jean Crispim — CSTEAM Elite</title>
+<style>
+body{margin:0;font-family:Arial,sans-serif;background:#f4f7fa;color:#172635}
+header{background:#1d3d5b;color:white;padding:22px 16px;text-align:center;position:sticky;top:0}
+h1{font-size:22px;margin:0 0 5px}.sub{opacity:.9}
+nav{display:flex;gap:6px;padding:10px;background:white;overflow:auto;position:sticky;top:83px}
+button{border:0;border-radius:10px;padding:12px 14px;background:#e5eef5;color:#173b58;font-weight:bold;white-space:nowrap}
+button.active{background:#367eae;color:white}
+.card{margin:14px;padding:16px;background:white;border-radius:16px;box-shadow:0 2px 10px #0001}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:11px 7px;border-bottom:1px solid #d9e3ea;text-align:left}th{background:#397eae;color:white}
+input{width:90px;padding:8px;border:1px solid #bccbd6;border-radius:8px}
+.note{background:#eaf2f7;padding:12px;border-radius:12px;margin-top:12px;font-size:14px}
+</style></head><body>
+<header><h1>TREINO JEAN CRISPIM</h1><div class="sub">CSTEAM ELITE • 4 treinos por semana</div></header>
+<nav id="nav"></nav><main id="app"></main>
+<script>
+const T=[
+["TREINO 1 — LOWER","Ênfase em Quadríceps + Abdômen",[["Agachamento no Smith com Máxima Amplitude","3","6–8","75–90 s"],["Hack Machine com Máxima Amplitude","3","8–10","60–75 s"],["Leg Press 45° com Máxima Amplitude","3","10–12","60–75 s"],["Cadeira Extensora","3","20–25","45–60 s"],["Cadeira Adutora","3","12–15","45–60 s"],["Abdômen na Máquina","3","12–15","30–45 s"]]],
+["TREINO 2 — UPPER","Peito + Costas + Ombros + Braços + Panturrilha",[["Supino Reto com Barra","3","6–8","75–90 s"],["Supino Inclinado com Halteres","2","8–10","60–75 s"],["Puxada Aberta Frontal","3","8–10","60–75 s"],["Remada Baixa com Triângulo","2","10–12","60–75 s"],["Desenvolvimento na Máquina — Pegada Pronada","3","8–10","60–75 s"],["Elevação Lateral com Halteres","2","20–25","45–60 s"],["Rosca Direta na Polia","2","10–12","45–60 s"],["Tríceps na Polia com Corda","2","10–12","45–60 s"],["Panturrilha em Pé na Máquina","3","12–15","30–45 s"]]],
+["TREINO 3 — LOWER","Ênfase em Posteriores e Glúteos",[["Stiff com Halteres","3","6–8","75–90 s"],["Cadeira Flexora","3","10–12","45–60 s"],["Mesa Flexora","3","20–25","45–60 s"],["Banco Romano com Ênfase em Posteriores","3","12–15","45–60 s"],["Elevação Pélvica na Máquina","3","8–10","60–75 s"],["Cadeira Abdutora","3","12–15","45–60 s"],["Abdômen no Rolo","3","12–15","30–45 s"]]],
+["TREINO 4 — UPPER","Costas + Peito + Ombros + Braços",[["Remada Aberta Pronada na Máquina","3","6–8","75–90 s"],["Puxada Fechada com Triângulo","3","10–12","60–75 s"],["Supino Inclinado na Máquina","3","8–10","60–75 s"],["Voador na Máquina","2","20–25","45–60 s"],["Voador Invertido","3","12–15","45–60 s"],["Elevação Lateral na Polia","2","12–15","45–60 s"],["Rosca Martelo com Halteres","2","10–12","45–60 s"],["Tríceps Testa com Halteres","2","10–12","45–60 s"],["Abdômen Infra — Elevação de Pernas na Paralela","3","12–15","30–45 s"]]]
+];
+let nav=document.getElementById('nav'), app=document.getElementById('app');
+T.forEach((t,i)=>{let b=document.createElement('button');b.textContent='Treino '+(i+1);b.onclick=()=>show(i);nav.appendChild(b)});
+function show(i){[...nav.children].forEach((b,j)=>b.className=j===i?'active':'');let t=T[i];
+let rows=t[2].map((r,j)=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td><input placeholder="kg"></td></tr>`).join('');
+app.innerHTML=`<section class="card"><h2>${t[0]}</h2><p>${t[1]}</p><table><tr><th>Exercício</th><th>Séries</th><th>Reps</th><th>Desc.</th><th>Carga</th></tr>${rows}</table>
+<div class="note"><b>Cardio:</b> 30 minutos todos os dias, inclusive nos dias de folga.</div>
+<div class="note"><b>Execução:</b> aquecimento progressivo antes do primeiro exercício multiarticular; amplitude adequada, execução controlada e técnica estável. Aumente a carga quando completar o limite superior da faixa com boa execução.</div></section>`;
+}
+show(0);
+</script><script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(()=>{});}</script></body></html>

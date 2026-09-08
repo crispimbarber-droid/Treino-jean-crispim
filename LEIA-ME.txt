@@ -1,0 +1,9 @@
+COMO COLOCAR O TREINO NA TELA INICIAL DO ANDROID
+
+Este pacote já está preparado como PWA, com ícone e modo de aplicativo.
+
+IMPORTANTE: para o Android instalar como aplicativo de verdade, o index.html precisa ser aberto por uma página HTTPS (não apenas como arquivo local).
+
+Se você abrir o arquivo diretamente no Chrome e aparecer a opção “Adicionar à tela inicial”, pode usar essa opção. Se não aparecer, o pacote precisa ser publicado em um endereço HTTPS.
+
+Depois de publicado: abra a página no Chrome > menu ⋮ > “Adicionar à tela inicial” ou “Instalar app”. O ícone “JC” aparecerá na área de trabalho e o app abrirá em tela própria.
