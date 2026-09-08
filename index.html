@@ -87,14 +87,26 @@ historicoBtn.onclick=()=>{
   }
 app.innerHTML='<section class="card"><h2>📊 Histórico de Treinos</h2>'+
   historico.slice().reverse().map(h=>{
-    const i=T.findIndex(t=>t[0]===h.treino);
-const ex=T[i]?.[2]||[];
-    return '<div class="note"><b>'+h.data+'</b><br><b>'+h.treino+'</b><br><br>'+
-      h.cargas.map((c,j)=>
-        '🏋️ '+(ex[j]?.[0]||'Exercício')+' — <b>'+(c||'—')+(c?' kg':'')+'</b>'
-      ).join('<br>')+
-      '</div>';
-  }).join('')+
-  '</section>';
+  const pos=historico.indexOf(h);
+  const i=T.findIndex(t=>t[0]===h.treino);
+  const ex=T[i]?.[2]||[];
+  const anterior=historico.slice(0,pos).reverse().find(x=>x.treino===h.treino);
+
+  return '<div class="note"><b>'+h.data+'</b><br><b>'+h.treino+'</b><br>'+
+    h.cargas.map((c,j)=>{
+      const ant=anterior?.cargas?.[j];
+      let evolucao='';
+
+      if(c && ant && Number(c)>Number(ant)){
+        evolucao=' 📈 +'+(Number(c)-Number(ant))+' kg';
+      }else if(c && ant && Number(c)<Number(ant)){
+        evolucao=' 📉 '+(Number(c)-Number(ant))+' kg';
+      }
+
+      return '🏆 '+(ex[j]?.[0]||'Exercício')+' — <b>'+(c||'—')+' kg</b>'+evolucao;
+    }).join('<br>')+
+    '</div>';
+}).join('')+
+'</section>';
 };
 </script><script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(()=>{});}</script></body></html>
