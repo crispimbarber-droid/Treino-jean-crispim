@@ -78,7 +78,7 @@ document.getElementById('finish').addEventListener('click',()=>{
 historicoBtn.textContent='📊 Histórico';
 nav.appendChild(historicoBtn);
 
-historicoBtn.addEventListener('click',()=>{
+historicoBtn.onclick=()=>{
   const historico=JSON.parse(localStorage.getItem('historico_treinos')||'[]');
 
   if(historico.length===0){
@@ -96,5 +96,5 @@ const ex=T[i]?.[2]||[];
       '</div>';
   }).join('')+
   '</section>';
-});
+};
 </script><script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(()=>{});}</script></body></html>
