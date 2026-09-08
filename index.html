@@ -74,4 +74,23 @@ document.getElementById('finish').addEventListener('click',()=>{
 
   alert('Treino concluído e salvo! 💪');
 });
+  const historicoBtn=document.createElement('button');
+historicoBtn.textContent='📊 Histórico';
+nav.appendChild(historicoBtn);
+
+historicoBtn.addEventListener('click',()=>{
+  const historico=JSON.parse(localStorage.getItem('historico_treinos')||'[]');
+
+  if(historico.length===0){
+    app.innerHTML='<section class="card"><h2>📊 Histórico de Treinos</h2><p>Nenhum treino concluído ainda.</p></section>';
+    return;
+  }
+
+  app.innerHTML='<section class="card"><h2>📊 Histórico de Treinos</h2>'+
+    historico.slice().reverse().map(h=>
+      '<div class="note"><b>'+h.data+'</b><br>'+h.treino+
+      '<br><br>Cargas: '+h.cargas.map(c=>c||'—').join(' • ')+'</div>'
+    ).join('')+
+    '</section>';
+});
 </script><script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(()=>{});}</script></body></html>
