@@ -96,13 +96,15 @@ app.innerHTML='<section class="card"><h2>📊 Histórico de Treinos</h2>'+
     h.cargas.map((c,j)=>{
       const ant=anterior?.cargas?.[j];
       let evolucao='';
+const cargasEx=historico.filter(x=>x.treino===h.treino).map(x=>Number(x.cargas[j])).filter(x=>!isNaN(x));
+const maior=cargasEx.length?Math.max(...cargasEx):0;
 
       if(c && ant && Number(c)>Number(ant)){
         evolucao=' 📈 +'+(Number(c)-Number(ant))+' kg';
       }else if(c && ant && Number(c)<Number(ant)){
         evolucao=' 📉 '+(Number(c)-Number(ant))+' kg';
       }
-
+if(c && Number(c)===maior)evolucao+=' 🏆 RECORD';
       return '🏆 '+(ex[j]?.[0]||'Exercício')+' — <b>'+(c||'—')+' kg</b>'+evolucao;
     }).join('<br>')+
     '</div>';
