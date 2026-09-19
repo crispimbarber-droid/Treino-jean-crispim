@@ -1,7 +1,7 @@
 <!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icon-48.png">
+<link rel="icon" href="icons/icon-48.png">
 <meta name="theme-color" content="#1d3d5b">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -32,31 +32,40 @@ const T=[
 let nav=document.getElementById('nav'), app=document.getElementById('app');
 T.forEach((t,i)=>{let b=document.createElement('button');b.textContent='Treino '+(i+1);b.onclick=()=>show(i);nav.appendChild(b)});
 function show(i){[...nav.children].forEach((b,j)=>b.className=j===i?'active':'');let t=T[i];
-let rows=t[2].map((r,j)=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td><input type="checkbox" class="feito"> <input placeholder="kg"></td></tr>`).join('');
+let rows=t[2].map((r,j)=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td><input type="checkbox" class="feito"> <input placeholder="kg" class="carga"></td></tr>`).join('');
 app.innerHTML=`<section class="card"><h2>${t[0]}</h2><p>${t[1]}</p><table><tr><th>Exercício</th><th>Séries</th><th>Reps</th><th>Desc.</th><th>Carga</th></tr>${rows}</table>
 <div class="note"><b>Cardio:</b> 30 minutos todos os dias, inclusive nos dias de folga.</div>
 <div class="note"><b>Execução:</b> aquecimento progressivo antes do primeiro exercício multiarticular; amplitude adequada, execução controlada e técnica estável. Aumente a carga quando completar o limite superior da faixa com boa execução.</div></section>`;if(document.getElementById('finish'))document.getElementById('finish').style.display='block';
+restoreLoads();
 }
-show(0);function saveLoads(){
+function saveLoads(){
 const active=[...nav.children].findIndex(b=>b.classList.contains('active'));
-document.querySelectorAll('input').forEach((input,j)=>{
+document.querySelectorAll('.carga').forEach((input,j)=>{
 localStorage.setItem('carga_'+active+'_'+j,input.value);
+});
+document.querySelectorAll('.feito').forEach((input,j)=>{
+localStorage.setItem('feito_'+active+'_'+j,input.checked?'1':'0');
 });
 }
 function restoreLoads(){
 const active=[...nav.children].findIndex(b=>b.classList.contains('active'));
-document.querySelectorAll('input').forEach((input,j)=>{
+document.querySelectorAll('.carga').forEach((input,j)=>{
 input.value=localStorage.getItem('carga_'+active+'_'+j)||'';
+});
+document.querySelectorAll('.feito').forEach((input,j)=>{
+input.checked=localStorage.getItem('feito_'+active+'_'+j)==='1';
 });
 }
 app.addEventListener('input',saveLoads);
+app.addEventListener('change',saveLoads);
 nav.addEventListener('click',()=>setTimeout(restoreLoads,50));
-restoreLoads();document.body.insertAdjacentHTML('beforeend',
+show(0);
+document.body.insertAdjacentHTML('beforeend',
 '<button id="finish" style="position:fixed;bottom:15px;left:15px;right:15px;background:#1d3d5b;color:white;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:bold;z-index:999">CONCLUIR TREINO</button>');
 document.getElementById('finish').addEventListener('click',()=>{
 const active=[...nav.children].findIndex(b=>b.classList.contains('active'));
 const treino=T[active][0];
-const cargas=[...document.querySelectorAll('input')].map(input=>input.value);
+const cargas=[...document.querySelectorAll('.carga')].map(input=>input.value);
 const data=new Date().toLocaleDateString('pt-BR');
 const historico=JSON.parse(localStorage.getItem('historico_treinos')||'[]');
 historico.push({
