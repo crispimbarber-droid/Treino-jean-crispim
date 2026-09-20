@@ -1,26 +1,90 @@
 <!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icons/icon-48.png">
-<meta name="theme-color" content="#1d3d5b">
+<link rel="icon" href="icon-48.png">
+<meta name="theme-color" content="#0b0b0b">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Treino Jean">
 <title>Treino Jean Crispim — CSTEAM Elite</title>
 <style>
-body{margin:0;font-family:Arial,sans-serif;background:#f4f7fa;color:#172635}
-header{background:#1d3d5b;color:white;padding:22px 16px;text-align:center;position:sticky;top:0}
-h1{font-size:22px;margin:0 0 5px}.sub{opacity:.9}
-nav{display:flex;gap:6px;padding:10px;background:white;overflow:auto;position:sticky;top:83px}
-button{border:0;border-radius:10px;padding:12px 14px;background:#e5eef5;color:#173b58;font-weight:bold;white-space:nowrap}
-button.active{background:#367eae;color:white}
-.card{margin:14px;padding:16px;background:white;border-radius:16px;box-shadow:0 2px 10px #0001}
-table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:11px 7px;border-bottom:1px solid #d9e3ea;text-align:left}th{background:#397eae;color:white}
-input{width:90px;padding:8px;border:1px solid #bccbd6;border-radius:8px}
-.note{background:#eaf2f7;padding:12px;border-radius:12px;margin-top:12px;font-size:14px}
+:root{
+  --bg:#0a0a0a;
+  --bg-card:#151515;
+  --bg-raised:#1c1c1c;
+  --gold:#cda434;
+  --gold-soft:#e8c766;
+  --line:rgba(205,164,52,.25);
+  --text:#f2f2f0;
+  --text-dim:#a8a8a4;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+header{background:linear-gradient(180deg,#000,#141414);color:var(--text);padding:20px 16px 14px;text-align:center;position:sticky;top:0;border-bottom:1px solid var(--line);z-index:5}
+h1{font-size:21px;margin:0 0 4px;color:var(--gold-soft);letter-spacing:1.5px;font-weight:800}
+.sub{opacity:.85;font-size:13px;color:var(--text-dim)}
+#workoutTimer{margin-top:10px;display:inline-block;font-family:"Courier New",monospace;font-size:15px;font-weight:bold;color:var(--gold);background:#000;border:1px solid var(--line);border-radius:8px;padding:5px 12px;letter-spacing:1px}
+nav{display:flex;gap:6px;padding:10px;background:#0d0d0d;overflow:auto;position:sticky;top:132px;border-bottom:1px solid var(--line);z-index:4}
+#startWorkoutBtn{margin-top:8px;background:var(--gold);color:#0a0a0a;border:0;border-radius:20px;padding:9px 18px;font-weight:800;font-size:13px;letter-spacing:.3px}
+#startWorkoutBtn.running{background:#000;color:var(--gold);border:1px solid var(--gold);cursor:default}
+button{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--bg-raised);color:var(--gold-soft);font-weight:bold;white-space:nowrap;font-size:13px}
+button.active{background:var(--gold);color:#0a0a0a;border-color:var(--gold);box-shadow:0 0 10px rgba(205,164,52,.45)}
+.card{margin:14px;padding:16px;background:var(--bg-card);border:1px solid var(--line);border-radius:16px;box-shadow:0 4px 18px rgba(0,0,0,.55)}
+.card h2{margin:0 0 4px;color:var(--gold-soft);font-size:18px;letter-spacing:.5px}
+.card>p{color:var(--text-dim);margin-top:0;font-size:13px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:520px}
+th,td{padding:10px 7px;border-bottom:1px solid #262620;text-align:left;vertical-align:top}
+th{background:#000;color:var(--gold-soft);font-size:12px;letter-spacing:.3px;border-bottom:2px solid var(--gold)}
+td{color:#e9e9e6}
+input{width:80px;padding:7px;border:1px solid var(--line);border-radius:8px;background:#0f0f0f;color:var(--text)}
+input.feito{width:auto}
+.rest-btn{margin-top:6px;display:inline-block;background:#0f0f0f;color:var(--gold-soft);border:1px solid var(--gold);border-radius:20px;padding:5px 10px;font-size:11px;font-weight:bold;cursor:pointer;white-space:nowrap}
+.rest-btn:active{background:var(--gold);color:#0a0a0a}
+.note{background:#121210;border:1px solid var(--line);border-left:3px solid var(--gold);padding:12px;border-radius:10px;margin-top:12px;font-size:13px;color:#ddd}
+#finish{position:fixed;bottom:15px;left:15px;right:15px;background:linear-gradient(135deg,var(--gold-soft),var(--gold));color:#0a0a0a;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:800;z-index:999;letter-spacing:.5px;box-shadow:0 6px 18px rgba(205,164,52,.35)}
+#restPanel{position:fixed;left:12px;right:12px;bottom:80px;max-width:420px;margin:0 auto;background:#0d0d0d;border:1px solid var(--gold);border-radius:16px;padding:14px;display:none;flex-direction:column;align-items:center;gap:8px;z-index:1000;box-shadow:0 8px 24px rgba(0,0,0,.7)}
+#restPanel.rest-done{animation:pulseGold 1s infinite}
+@keyframes pulseGold{0%,100%{box-shadow:0 0 8px rgba(205,164,52,.4)}50%{box-shadow:0 0 26px rgba(205,164,52,.9)}}
+#restLabel{color:var(--text-dim);font-size:12px;text-align:center}
+#restTime{font-size:40px;font-weight:800;color:var(--gold);font-family:"Courier New",monospace;letter-spacing:1px}
+.rest-controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.rest-controls button{padding:9px 12px;font-size:12px}
+#restCloseBtn{display:none;background:var(--gold);color:#0a0a0a;padding:10px 22px;border-radius:10px;border:0;font-weight:800}
+.welcome-card p{color:var(--text-dim);font-size:13px;margin:0}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat-box{background:#101010;border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
+.stat-label{font-size:11px;color:var(--text-dim);margin-bottom:4px}
+.stat-value{font-size:16px;font-weight:800;color:var(--gold-soft)}
+.dash-start{display:block;width:calc(100% - 28px);margin:6px auto 16px;background:linear-gradient(135deg,var(--gold-soft),var(--gold));color:#0a0a0a;border:0;border-radius:14px;padding:18px;font-size:17px;font-weight:800;letter-spacing:.5px;box-shadow:0 6px 18px rgba(205,164,52,.35)}
+.dash-treino-card{cursor:pointer}
+.dash-treino-card:active{border-color:var(--gold)}
+@media (max-width:640px){
+table,tbody,tr{display:block;width:100%}
+table{min-width:0}
+.table-head-row{display:none}
+tr{margin-bottom:12px;background:#101010;border:1px solid var(--line);border-radius:12px;padding:4px 8px}
+td{display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px solid #232320;padding:10px 2px}
+td:last-child{border-bottom:0}
+td::before{content:attr(data-label);color:var(--gold-soft);font-weight:bold;font-size:11px;letter-spacing:.3px;flex:0 0 auto}
+td[data-label="Descanso"]{flex-direction:column;align-items:flex-start;gap:6px}
+td[data-label="Carga"]{flex-wrap:wrap}
+input{padding:10px;font-size:15px}
+input.feito{width:22px;height:22px;flex:0 0 auto}
+input.carga{width:100px}
+button{min-height:44px}
+.rest-btn{min-height:38px;padding:8px 12px;font-size:12px}
+}
+@media (max-width:420px){
+  h1{font-size:18px}
+  #restTime{font-size:34px}
+  .card{margin:10px;padding:13px}
+}
 </style></head><body>
-<header><h1>TREINO JEAN CRISPIM</h1><div class="sub">CSTEAM ELITE • 4 treinos por semana</div></header>
+<header><h1>TREINO JEAN CRISPIM</h1><div class="sub">CSTEAM ELITE • 4 treinos por semana</div>
+<div id="workoutTimer">⏱️ TEMPO DO TREINO 00:00:00</div>
+<button id="startWorkoutBtn">▶ INICIAR TREINO</button></header>
 <nav id="nav"></nav><main id="app"></main>
 <script>
 const T=[
@@ -32,11 +96,40 @@ const T=[
 let nav=document.getElementById('nav'), app=document.getElementById('app');
 T.forEach((t,i)=>{let b=document.createElement('button');b.textContent='Treino '+(i+1);b.onclick=()=>show(i);nav.appendChild(b)});
 function show(i){[...nav.children].forEach((b,j)=>b.className=j===i?'active':'');let t=T[i];
-let rows=t[2].map((r,j)=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td><input type="checkbox" class="feito"> <input placeholder="kg" class="carga"></td></tr>`).join('');
-app.innerHTML=`<section class="card"><h2>${t[0]}</h2><p>${t[1]}</p><table><tr><th>Exercício</th><th>Séries</th><th>Reps</th><th>Desc.</th><th>Carga</th></tr>${rows}</table>
+let rows=t[2].map((r,j)=>`<tr><td data-label="Exercício">${r[0]}</td><td data-label="Séries">${r[1]}</td><td data-label="Reps">${r[2]}</td><td data-label="Descanso">${r[3]}<br><button class="rest-btn" data-rest="${r[3]}" data-name="${r[0].replace(/"/g,'&quot;')}">⏱ Descanso</button></td><td data-label="Carga"><input type="checkbox" class="feito"> <input placeholder="kg" class="carga"></td></tr>`).join('');
+app.innerHTML=`<section class="card"><h2>${t[0]}</h2><p>${t[1]}</p><div class="table-wrap"><table><tr class="table-head-row"><th>Exercício</th><th>Séries</th><th>Reps</th><th>Desc.</th><th>Carga</th></tr>${rows}</table></div>
 <div class="note"><b>Cardio:</b> 30 minutos todos os dias, inclusive nos dias de folga.</div>
 <div class="note"><b>Execução:</b> aquecimento progressivo antes do primeiro exercício multiarticular; amplitude adequada, execução controlada e técnica estável. Aumente a carga quando completar o limite superior da faixa com boa execução.</div></section>`;if(document.getElementById('finish'))document.getElementById('finish').style.display='block';
 restoreLoads();
+}
+function showDashboard(){
+const finishBtn=document.getElementById('finish');
+if(finishBtn)finishBtn.style.display='none';
+const historico=JSON.parse(localStorage.getItem('historico_treinos')||'[]');
+let proximoIdx=0;
+if(historico.length){
+const idxUltimo=T.findIndex(x=>x[0]===historico[historico.length-1].treino);
+proximoIdx=idxUltimo>=0?(idxUltimo+1)%T.length:0;
+}
+const proximoTreino=T[proximoIdx][0];
+const inicioSemana=inicioSemanaAtual();
+const treinosSemana=historico.filter(h=>{const dt=parseDataPtBR(h.data);return dt&&dt>=inicioSemana;}).length;
+let totalRecordes=0;
+T.forEach(t=>{t[2].forEach((ex,j)=>{
+const valores=historico.filter(h=>h.treino===t[0]).map(h=>parseCarga(h.cargas[j])).filter(v=>v!==null);
+if(valores.length>0)totalRecordes++;
+});});
+const totalSegundos=historico.reduce((acc,h)=>acc+parseDuracaoSegundos(h.duracao),0);
+const treinoCards=T.map((t,i)=>`<div class="card dash-treino-card" data-idx="${i}"><h2>${t[0]}</h2><p>${t[1]}</p></div>`).join('');
+app.innerHTML=`<section class="card welcome-card"><h2>Olá, Jean 👊</h2><p>Pronto para o treino de hoje?</p></section>
+<section class="card stats-card"><div class="stats-grid">
+<div class="stat-box"><div class="stat-label">🏋️ Próximo treino</div><div class="stat-value">${proximoTreino}</div></div>
+<div class="stat-box"><div class="stat-label">📊 Treinos na semana</div><div class="stat-value">${treinosSemana} / 4</div></div>
+<div class="stat-box"><div class="stat-label">🏆 Recordes</div><div class="stat-value">${totalRecordes}</div></div>
+<div class="stat-box"><div class="stat-label">⏱️ Tempo total treinado</div><div class="stat-value">${formatHMS(totalSegundos)}</div></div>
+</div></section>
+<button class="dash-start" data-idx="${proximoIdx}">▶ INICIAR TREINO</button>
+${treinoCards}`;
 }
 function saveLoads(){
 const active=[...nav.children].findIndex(b=>b.classList.contains('active'));
@@ -59,9 +152,149 @@ input.checked=localStorage.getItem('feito_'+active+'_'+j)==='1';
 app.addEventListener('input',saveLoads);
 app.addEventListener('change',saveLoads);
 nav.addEventListener('click',()=>setTimeout(restoreLoads,50));
-show(0);
+
+/* ---- Tempo total do treino ---- */
+let workoutSeconds=0, workoutInterval=null, workoutRunning=false;
+function formatHMS(total){
+const h=String(Math.floor(total/3600)).padStart(2,'0');
+const m=String(Math.floor((total%3600)/60)).padStart(2,'0');
+const s=String(total%60).padStart(2,'0');
+return h+':'+m+':'+s;
+}
+function updateWorkoutDisplay(){
+const el=document.getElementById('workoutTimer');
+if(el)el.textContent='⏱️ TEMPO DO TREINO '+formatHMS(workoutSeconds);
+}
+function startWorkoutTimer(){
+if(workoutRunning)return;
+workoutRunning=true;
+workoutSeconds=0;
+updateWorkoutDisplay();
+workoutInterval=setInterval(()=>{workoutSeconds++;updateWorkoutDisplay();},1000);
+const btn=document.getElementById('startWorkoutBtn');
+if(btn){btn.textContent='⏱️ TREINO EM ANDAMENTO';btn.disabled=true;btn.classList.add('running');}
+}
+function resetWorkoutTimer(){
+clearInterval(workoutInterval);workoutInterval=null;
+workoutRunning=false;
+workoutSeconds=0;
+updateWorkoutDisplay();
+const btn=document.getElementById('startWorkoutBtn');
+if(btn){btn.textContent='▶ INICIAR TREINO';btn.disabled=false;btn.classList.remove('running');}
+}
+
+/* ---- Cronômetro de descanso ---- */
+let restSeconds=0, restInterval=null, restPaused=false, restExerciseName='';
+function parseRestSeconds(str){
+const nums=(str.match(/\d+/g)||[]).map(Number);
+if(nums.length===0)return 60;
+if(nums.length===1)return nums[0];
+return Math.round((nums[0]+nums[1])/2);
+}
+function beep(){
+try{
+const ctx=new (window.AudioContext||window.webkitAudioContext)();
+[0,0.28].forEach(delay=>{
+const o=ctx.createOscillator(), g=ctx.createGain();
+o.connect(g);g.connect(ctx.destination);
+o.type='sine';o.frequency.value=880;
+g.gain.setValueAtTime(0.25,ctx.currentTime+delay);
+g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+delay+0.25);
+o.start(ctx.currentTime+delay);
+o.stop(ctx.currentTime+delay+0.26);
+});
+}catch(e){}
+}
+function updateRestDisplay(){
+const m=String(Math.floor(restSeconds/60)).padStart(2,'0');
+const s=String(restSeconds%60).padStart(2,'0');
+const disp=document.getElementById('restTime');if(disp)disp.textContent=m+':'+s;
+const label=document.getElementById('restLabel');if(label)label.textContent='Descanso: '+restExerciseName;
+}
+function restFinished(){
+beep();
+const panel=document.getElementById('restPanel');
+panel.classList.add('rest-done');
+document.getElementById('restLabel').textContent='✅ Descanso concluído — '+restExerciseName;
+document.getElementById('restControls').style.display='none';
+document.getElementById('restCloseBtn').style.display='block';
+}
+function tickRest(){
+if(restPaused)return;
+restSeconds--;
+if(restSeconds<=0){
+restSeconds=0;
+clearInterval(restInterval);restInterval=null;
+updateRestDisplay();
+restFinished();
+return;
+}
+updateRestDisplay();
+}
+function startRestTimer(seconds,name){
+clearInterval(restInterval);restInterval=null;
+restSeconds=seconds;restPaused=false;restExerciseName=name;
+const panel=document.getElementById('restPanel');
+panel.style.display='flex';
+panel.classList.remove('rest-done');
+document.getElementById('restControls').style.display='flex';
+document.getElementById('restCloseBtn').style.display='none';
+document.getElementById('restPauseBtn').textContent='⏸ Pausar';
+updateRestDisplay();
+restInterval=setInterval(tickRest,1000);
+}
+function pauseRest(){
+restPaused=!restPaused;
+document.getElementById('restPauseBtn').textContent=restPaused?'▶ Retomar':'⏸ Pausar';
+}
+function adjustRest(delta){
+if(restSeconds===0 && !restInterval)return;
+restSeconds=Math.max(0,restSeconds+delta);
+updateRestDisplay();
+if(restSeconds===0){clearInterval(restInterval);restInterval=null;restFinished();}
+}
+function skipRest(){
+clearInterval(restInterval);restInterval=null;
+document.getElementById('restPanel').style.display='none';
+}
+function closeRestPanel(){
+document.getElementById('restPanel').style.display='none';
+}
+app.addEventListener('click',e=>{
+const btn=e.target.closest('.rest-btn');
+if(btn){
+const seconds=parseRestSeconds(btn.dataset.rest);
+startRestTimer(seconds,btn.dataset.name);
+return;
+}
+const dashStart=e.target.closest('.dash-start');
+if(dashStart){
+startWorkoutTimer();
+show(Number(dashStart.dataset.idx));
+return;
+}
+const dashCard=e.target.closest('.dash-treino-card');
+if(dashCard){
+show(Number(dashCard.dataset.idx));
+}
+});
 document.body.insertAdjacentHTML('beforeend',
-'<button id="finish" style="position:fixed;bottom:15px;left:15px;right:15px;background:#1d3d5b;color:white;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:bold;z-index:999">CONCLUIR TREINO</button>');
+'<div id="restPanel">'+
+'<div id="restLabel">Descanso</div>'+
+'<div id="restTime">00:00</div>'+
+'<div id="restControls" class="rest-controls">'+
+'<button id="restPauseBtn" onclick="pauseRest()">⏸ Pausar</button>'+
+'<button onclick="adjustRest(-15)">-15s</button>'+
+'<button onclick="adjustRest(15)">+15s</button>'+
+'<button onclick="skipRest()">Pular descanso</button>'+
+'</div>'+
+'<button id="restCloseBtn" onclick="closeRestPanel()">OK</button>'+
+'</div>');
+
+showDashboard();
+document.getElementById('startWorkoutBtn').addEventListener('click',startWorkoutTimer);
+document.body.insertAdjacentHTML('beforeend',
+'<button id="finish" style="position:fixed;bottom:15px;left:15px;right:15px;z-index:999">CONCLUIR TREINO</button>');
 let concluindoTreino=false;
 document.getElementById('finish').addEventListener('click',()=>{
 if(concluindoTreino)return;
@@ -70,14 +303,18 @@ const active=[...nav.children].findIndex(b=>b.classList.contains('active'));
 const treino=T[active][0];
 const cargas=[...document.querySelectorAll('.carga')].map(input=>input.value);
 const data=new Date().toLocaleDateString('pt-BR');
+const duracao=formatHMS(workoutSeconds);
+clearInterval(workoutInterval);
 const historico=JSON.parse(localStorage.getItem('historico_treinos')||'[]');
 historico.push({
 data:data,
 treino:treino,
-cargas:cargas
+cargas:cargas,
+duracao:duracao
 });
 localStorage.setItem('historico_treinos',JSON.stringify(historico));
-alert('Treino concluído e salvo! 💪');
+alert('Treino concluído em '+duracao+' e salvo! 💪');
+resetWorkoutTimer();
 setTimeout(()=>{concluindoTreino=false;},1000);
 });
 const historicoBtn=document.createElement('button');
@@ -95,7 +332,7 @@ const pos=historico.indexOf(h);
 const i=T.findIndex(t=>t[0]===h.treino);
 const ex=T[i]?.[2]||[];
 const anterior=historico.slice(0,pos).reverse().find(x=>x.treino===h.treino);
-return '<div class="note"><b>'+h.data+'</b><br><b>'+h.treino+'</b><br>'+
+return '<div class="note"><b>'+h.data+'</b><br><b>'+h.treino+'</b>'+(h.duracao?' — ⏱ '+h.duracao:'')+'<br>'+
 h.cargas.map((c,j)=>{
 const ant=anterior?.cargas?.[j];
 let evolucao='';
@@ -115,4 +352,83 @@ return '🏆 '+(ex[j]?.[0]||'Exercício')+' — <b>'+cargaExibida+'</b>'+evoluca
 }).join('')+
 '</section>';
 };
+
+/* ---- FASE 2: Evolução, Recordes e Resumo ---- */
+function parseCarga(c){
+if(c===undefined||c===null||c==='')return null;
+const m=String(c).match(/\d+([.,]\d+)?/);
+return m?Number(m[0].replace(',','.')):null;
+}
+function parseDuracaoSegundos(str){
+if(!str)return 0;
+const p=String(str).split(':').map(Number);
+if(p.length!==3||p.some(isNaN))return 0;
+return p[0]*3600+p[1]*60+p[2];
+}
+function parseDataPtBR(str){
+const p=String(str||'').split('/');
+if(p.length!==3)return null;
+const d=Number(p[0]),m=Number(p[1]),y=Number(p[2]);
+if(!d||!m||!y)return null;
+return new Date(y,m-1,d);
+}
+function inicioSemanaAtual(){
+const d=new Date();
+const dia=d.getDay();
+d.setDate(d.getDate()+(dia===0?-6:1-dia));
+d.setHours(0,0,0,0);
+return d;
+}
+const evolucaoBtn=document.createElement('button');
+evolucaoBtn.textContent='📈 Evolução';
+nav.appendChild(evolucaoBtn);
+evolucaoBtn.onclick=()=>{
+const historico=JSON.parse(localStorage.getItem('historico_treinos')||'[]');
+if(historico.length===0){
+app.innerHTML='<section class="card"><h2>📈 Evolução</h2><p>Nenhum treino concluído ainda. Conclua um treino para ver estatísticas aqui.</p></section>';
+return;
+}
+const totalTreinos=historico.length;
+const totalSegundos=historico.reduce((acc,h)=>acc+parseDuracaoSegundos(h.duracao),0);
+const totalExercicios=historico.reduce((acc,h)=>acc+h.cargas.filter(c=>parseCarga(c)!==null).length,0);
+const inicioSemana=inicioSemanaAtual();
+const treinosSemana=historico.filter(h=>{const dt=parseDataPtBR(h.data);return dt&&dt>=inicioSemana;}).length;
+const resumoHtml='<section class="card"><h2>📊 RESUMO</h2>'+
+'<div class="note">Treinos realizados: <b>'+totalTreinos+'</b></div>'+
+'<div class="note">Tempo total de treino: <b>'+formatHMS(totalSegundos)+'</b></div>'+
+'<div class="note">Exercícios registrados: <b>'+totalExercicios+'</b></div>'+
+'<div class="note">Treinos nesta semana: <b>'+treinosSemana+'</b></div>'+
+'</section>';
+let recordesHtml='', evolucaoHtml='';
+T.forEach(t=>{
+const nome=t[0], exs=t[2];
+const entradas=historico.filter(h=>h.treino===nome);
+if(entradas.length===0)return;
+let recLin='', evoLin='';
+exs.forEach((ex,j)=>{
+const valores=entradas.map(h=>parseCarga(h.cargas[j])).filter(v=>v!==null);
+if(valores.length===0)return;
+const maior=Math.max(...valores);
+recLin+=ex[0]+' — <b>'+maior+' kg</b><br>';
+const atual=valores[valores.length-1];
+if(valores.length>=2){
+const anterior=valores[valores.length-2];
+const diff=Math.round((atual-anterior)*10)/10;
+const seta=diff>0?' | +'+diff+' kg 📈':diff<0?' | '+diff+' kg 📉':' | sem variação';
+evoLin+=ex[0]+': '+anterior+' kg → '+atual+' kg'+seta+'<br>';
+}else{
+evoLin+=ex[0]+': '+atual+' kg (sem treino anterior para comparar)<br>';
+}
+});
+if(recLin)recordesHtml+='<div class="note"><b>'+nome+'</b><br>'+recLin+'</div>';
+if(evoLin)evolucaoHtml+='<div class="note"><b>'+nome+'</b><br>'+evoLin+'</div>';
+});
+app.innerHTML=resumoHtml+
+'<section class="card"><h2>🏆 RECORDES</h2>'+(recordesHtml||'<p>Sem dados suficientes ainda.</p>')+'</section>'+
+'<section class="card"><h2>📈 EVOLUÇÃO DE CARGAS</h2>'+(evolucaoHtml||'<p>Sem dados suficientes ainda.</p>')+'</section>';
+};
+const dashboardBtn=document.createElement('button');
+dashboardBtn.textContent='🏠 Dashboard';
+nav.appendChild(dashboardBtn);
+dashboardBtn.onclick=showDashboard;
 </script><script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(()=>{});}</script></body></html>
